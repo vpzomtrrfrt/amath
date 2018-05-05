@@ -19,7 +19,12 @@ Factor: Expression = {
 Term: Expression = {
 	Int => Expression::Const(Value::Int(<>)),
 	Float => Expression::Const(Value::Float(<>)),
-	"(" <a:Term> ")" => a
+	<a:Term> <b:InvMultTerm> => Expression::Multiply(Box::new(a), Box::new(b)),
+	InvMultTerm
+};
+
+InvMultTerm: Expression = {
+	"(" <a:Expr> ")" => a
 };
 
 Int: i32 = r"[0-9]+" => i32::from_str(<>).unwrap();
