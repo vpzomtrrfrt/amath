@@ -5,11 +5,14 @@ use std::str::FromStr;
 grammar;
 
 pub Expr: Expression = {
+	<a:Expr> "+" <b:Factor> => Expression::Add(Box::new(a), Box::new(b)),
+	<a:Expr> "-" <b:Factor> => Expression::Subtract(Box::new(a), Box::new(b)),
 	Factor,
 };
 
 Factor: Expression = {
 	<a:Factor> "*" <b:Term> => Expression::Multiply(Box::new(a), Box::new(b)),
+	<a:Factor> "/" <b:Term> => Expression::Divide(Box::new(a), Box::new(b)),
 	Term
 };
 
