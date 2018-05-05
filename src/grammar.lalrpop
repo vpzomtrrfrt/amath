@@ -24,8 +24,11 @@ Term: Expression = {
 };
 
 InvMultTerm: Expression = {
-	"(" <a:Expr> ")" => a
+	"(" <a:Expr> ")" => a,
+	Variable => Expression::Variable(<>)
 };
 
 Int: i32 = r"[0-9]+" => i32::from_str(<>).unwrap();
 Float: f64 = r"[0-9]+\.[0-9]+" => f64::from_str(<>).unwrap();
+
+Variable: String = r"[A-Za-z]+" => <>.to_owned();

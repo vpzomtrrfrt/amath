@@ -1,13 +1,18 @@
 use types::{Context, Expression, Value};
+use error::EvalError as Error;
+
+use std::borrow::Cow;
 
 impl Expression {
-    pub fn eval(&self, context: &Context) -> Value {
+    pub fn eval<'a>(&'a self, context: &'a Context) -> Result<Cow<'a, Value>, Error> {
+        use std::borrow::Borrow;
         match *self {
-            Expression::Const(ref x) => *x,
-            Expression::Add(ref a, ref b) => a.eval(context).add(&b.eval(context)),
-            Expression::Subtract(ref a, ref b) => a.eval(context).subtract(&b.eval(context)),
-            Expression::Multiply(ref a, ref b) => a.eval(context).multiply(&b.eval(context)),
-            Expression::Divide(ref a, ref b) => a.eval(context).divide(&b.eval(context))
+            Expression::Const(ref x) => Ok(Cow::Borrowed(x)),
+            Expression::Add(ref a, ref b) => Ok(Cow::Owned(a.eval(context)?.add(b.eval(context)?.borrow()))),
+            Expression::Subtract(ref a, ref b) => Ok(Cow::Owned(a.eval(context)?.subtract(b.eval(context)?.borrow()))),
+            Expression::Multiply(ref a, ref b) => Ok(Cow::Owned(a.eval(context)?.multiply(b.eval(context)?.borrow()))),
+            Expression::Divide(ref a, ref b) => Ok(Cow::Owned(a.eval(context)?.divide(b.eval(context)?.borrow()))),
+            Expression::Variable(ref n) => context.get(n).ok_or_else(|| Error::UndefinedVariable(n.to_owned()))
         }
     }
 }
