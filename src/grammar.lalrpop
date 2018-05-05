@@ -1,0 +1,21 @@
+use types::*;
+
+use std::str::FromStr;
+
+grammar;
+
+pub Expr: Expression = {
+	Factor,
+};
+
+Factor: Expression = {
+	<a:Factor> "*" <b:Term> => Expression::Multiply(Box::new(a), Box::new(b)),
+	Term
+};
+
+Term: Expression = {
+	Int => Expression::Const(Value::Int(<>)),
+	"(" <a:Term> ")" => a
+};
+
+Int: i32 = r"[0-9]+" => i32::from_str(<>).unwrap();
