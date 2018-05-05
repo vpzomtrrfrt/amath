@@ -9,7 +9,8 @@ pub enum Expression {
 
 #[derive(Debug, Clone, Copy)]
 pub enum Value {
-    Int(i32)
+    Int(i32),
+    Float(f64)
 }
 
 #[derive(Default)]
