@@ -5,8 +5,13 @@ use std::str::FromStr;
 grammar;
 
 pub Expr: Expression = {
-	<a:Expr> "+" <b:Factor> => Expression::Add(Box::new(a), Box::new(b)),
-	<a:Expr> "-" <b:Factor> => Expression::Subtract(Box::new(a), Box::new(b)),
+	<a:Expr> "=" <b:Sum> => Expression::IsEq(Box::new(a), Box::new(b)),
+	Sum
+};
+
+Sum: Expression = {
+	<a:Sum> "+" <b:Factor> => Expression::Add(Box::new(a), Box::new(b)),
+	<a:Sum> "-" <b:Factor> => Expression::Subtract(Box::new(a), Box::new(b)),
 	Factor,
 };
 

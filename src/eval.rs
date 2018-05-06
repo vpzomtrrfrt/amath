@@ -12,7 +12,8 @@ impl Expression {
             Expression::Subtract(ref a, ref b) => Ok(Cow::Owned(a.eval(context)?.subtract(b.eval(context)?.borrow())?)),
             Expression::Multiply(ref a, ref b) => Ok(Cow::Owned(a.eval(context)?.multiply(b.eval(context)?.borrow(), context)?)),
             Expression::Divide(ref a, ref b) => Ok(Cow::Owned(a.eval(context)?.divide(b.eval(context)?.borrow())?)),
-            Expression::Variable(ref n) => context.get(n).ok_or_else(|| Error::UndefinedVariable(n.to_owned()))
+            Expression::Variable(ref n) => context.get(n).ok_or_else(|| Error::UndefinedVariable(n.to_owned())),
+            Expression::IsEq(ref a, ref b) => Ok(Cow::Owned(Value::Boolean(a.eval(context)? == b.eval(context)?)))
         }
     }
 }
