@@ -6,6 +6,8 @@ pub mod types;
 mod eval;
 mod error;
 
+pub use types::{Context, Value, Expression};
+
 pub type ParseError<'a> = lalrpop_util::ParseError<usize, grammar::Token<'a>, &'static str>;
 
 lazy_static! {
