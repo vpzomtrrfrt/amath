@@ -14,7 +14,8 @@ pub enum Expression {
 pub enum Value {
     Int(i32),
     Float(f64),
-    Function(String, u64)
+    Function(String, u64),
+    Boolean(bool)
 }
 
 #[derive(Default)]

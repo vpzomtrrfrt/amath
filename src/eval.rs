@@ -23,15 +23,18 @@ impl Value {
             Value::Int(a) => match *rh {
                 Value::Int(b) => Ok(Value::Int(a * b)),
                 Value::Float(_) => rh.multiply(self, context),
-                Value::Function(_, _) => Err(Error::InvalidOperation("Int + Function"))
+                Value::Function(_, _) => Err(Error::InvalidOperation("Int + Function")),
+                Value::Boolean(_) => Err(Error::InvalidOperation("Int * Boolean"))
             },
             Value::Float(a) => match *rh {
                 Value::Float(b) => Ok(Value::Float(a * b)),
                 Value::Int(b) => Ok(Value::Float(a * f64::from(b))),
-                Value::Function(_, _) => Err(Error::InvalidOperation("Float * Function"))
+                Value::Function(_, _) => Err(Error::InvalidOperation("Float * Function")),
+                Value::Boolean(_) => Err(Error::InvalidOperation("Float * Boolean"))
             },
             Value::Function(ref name, ref id) => context.call_function(&id, vec![rh])
-                .map_err(|msg| Error::FunctionError(name.to_owned(), msg))
+                .map_err(|msg| Error::FunctionError(name.to_owned(), msg)),
+            Value::Boolean(_) => Err(Error::InvalidOperation("Booleans cannot be multiplied."))
         }
     }
     fn add(&self, rh: &Value) -> Result<Value, Error> {
@@ -39,14 +42,17 @@ impl Value {
             Value::Int(a) => match *rh {
                 Value::Int(b) => Ok(Value::Int(a + b)),
                 Value::Float(_) => rh.add(self),
-                Value::Function(_, _) => Err(Error::InvalidOperation("Int + Function"))
+                Value::Function(_, _) => Err(Error::InvalidOperation("Int + Function")),
+                Value::Boolean(_) => Err(Error::InvalidOperation("Int + Boolean"))
             },
             Value::Float(a) => match *rh {
                 Value::Float(b) => Ok(Value::Float(a + b)),
                 Value::Int(b) => Ok(Value::Float(a + f64::from(b))),
-                Value::Function(_, _) => Err(Error::InvalidOperation("Float + Function"))
+                Value::Function(_, _) => Err(Error::InvalidOperation("Float + Function")),
+                Value::Boolean(_) => Err(Error::InvalidOperation("Float + Boolean"))
             },
-            Value::Function(_, _) => Err(Error::InvalidOperation("Functions cannot be added."))
+            Value::Function(_, _) => Err(Error::InvalidOperation("Functions cannot be added.")),
+            Value::Boolean(_) => Err(Error::InvalidOperation("Booleans cannot be added."))
         }
     }
     fn subtract(&self, rh: &Value) -> Result<Value, Error> {
@@ -54,14 +60,17 @@ impl Value {
             Value::Int(a) => match *rh {
                 Value::Int(b) => Ok(Value::Int(a - b)),
                 Value::Float(b) => Ok(Value::Float(f64::from(a) - b)),
-                Value::Function(_, _) => Err(Error::InvalidOperation("Int - Function"))
+                Value::Function(_, _) => Err(Error::InvalidOperation("Int - Function")),
+                Value::Boolean(_) => Err(Error::InvalidOperation("Int - Boolean"))
             },
             Value::Float(a) => match *rh {
                 Value::Float(b) => Ok(Value::Float(a - b)),
                 Value::Int(b) => Ok(Value::Float(a - f64::from(b))),
-                Value::Function(_, _) => Err(Error::InvalidOperation("Float - Function"))
+                Value::Function(_, _) => Err(Error::InvalidOperation("Float - Function")),
+                Value::Boolean(_) => Err(Error::InvalidOperation("Float - Boolean"))
             },
-            Value::Function(_, _) => Err(Error::InvalidOperation("Functions cannot be subtracted."))
+            Value::Function(_, _) => Err(Error::InvalidOperation("Functions cannot be subtracted.")),
+            Value::Boolean(_) => Err(Error::InvalidOperation("Booleans cannot be subtracted."))
         }
     }
     fn divide(&self, rh: &Value) -> Result<Value, Error> {
@@ -69,14 +78,17 @@ impl Value {
             Value::Int(a) => match *rh {
                 Value::Int(b) => Ok(Value::Int(a / b)),
                 Value::Float(b) => Ok(Value::Float(f64::from(a) / b)),
-                Value::Function(_, _) => Err(Error::InvalidOperation("Int / Function"))
+                Value::Function(_, _) => Err(Error::InvalidOperation("Int / Function")),
+                Value::Boolean(_) => Err(Error::InvalidOperation("Int / Boolean"))
             },
             Value::Float(a) => match *rh {
                 Value::Float(b) => Ok(Value::Float(a / b)),
                 Value::Int(b) => Ok(Value::Float(a / f64::from(b))),
-                Value::Function(_, _) => Err(Error::InvalidOperation("Float / Function"))
+                Value::Function(_, _) => Err(Error::InvalidOperation("Float / Function")),
+                Value::Boolean(_) => Err(Error::InvalidOperation("Float / Boolean"))
             },
-            Value::Function(_, _) => Err(Error::InvalidOperation("Functions cannot be divided."))
+            Value::Function(_, _) => Err(Error::InvalidOperation("Functions cannot be divided.")),
+            Value::Boolean(_) => Err(Error::InvalidOperation("Booleans cannot be divided."))
         }
     }
 }
