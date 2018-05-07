@@ -2,6 +2,9 @@
 name = "amath"
 version = "0.1.0"
 authors = ["Colin Reeder <vpzomtrrfrt@gmail.com>"]
+license = "Apache-2.0"
+repository = "https://github.com/vpzomtrrfrt/amath"
+description = "lalrpop-based arithmetic parser"
 
 [dependencies]
 lazy_static = "1.0.0"
