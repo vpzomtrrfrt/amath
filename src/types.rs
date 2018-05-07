@@ -19,6 +19,17 @@ pub enum Value {
     Boolean(bool)
 }
 
+impl std::fmt::Display for Value {
+    fn fmt(&self, fmt: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match *self {
+            Value::Int(i) => write!(fmt, "{}", i),
+            Value::Float(f) => write!(fmt, "{}", f),
+            Value::Function(ref name, _) => write!(fmt, "[function {}]", name),
+            Value::Boolean(b) => write!(fmt, "{}", b)
+        }
+    }
+}
+
 #[derive(Default)]
 pub struct Context {
     map: std::collections::HashMap<String, Value>,
